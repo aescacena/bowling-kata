@@ -1,44 +1,36 @@
 export class BowlingGame{
-    private maxScore : number = 10;
-    private maxGames : number = 10;
-    private secondTry: boolean;
-    private typeTurn : string[];
-    private scores   : number[];
+    private maxScore: number = 10;
+    private maxGames: number = 10;
+    private scores  : number[];
 
-    private STRIKE: string = "STRIKE";
-
-    constructor(scores?: number[], typeTurn?: string[]){
-        if(scores && typeTurn && scores.length > 0){
-            this.scores    = scores;
-            this.typeTurn = typeTurn;
-            this.secondTry = false;
-        }else {
-            this.scores    = [];
-            this.typeTurn  = [];
-            this.secondTry = false;
-        }
+    constructor(scores?: number[]){
+        this.scores = scores ? scores : [];
     }
 
     addNumberDown(number: number) {
-        if(this.secondTry){
+        if(this.isStrike(number)){
+            this.scores.push(this.maxScore);
+            this.scores.push(0);
             return;
         }
-        if(number >= this.maxScore){
-            this.scores.push(number);
-            this.typeTurn.push(this.STRIKE);
-        }
+        this.scores.push(number <= this.maxScore ? number : this.maxScore);
     }
 
     countScore(): number{
         let totalScore = 0;
         const games = (this.scores.length < this.maxGames) ? this.scores.length : this.maxGames;
-        for (let i = 0; i < games; i++) {
-            totalScore += this.scores[i];
-            if((i + 1) < (this.scores.length)){
-                totalScore += this.scores[i + 1];
-            }
-            if((i + 2) < (this.scores.length)){
-                totalScore += this.scores[i + 2];
+        for (let i = 1; i < games * 2; i = i + 2) {
+            let score = this.scores[i - 1];
+            if(this.isStrike(score)){
+                if((i + 1) < (this.scores.length)){
+                    score += this.scores[i + 1];
+                    if(this.isStrike(this.scores[i + 1])){
+                        if((i + 3) < (this.scores.length)){
+                            score += this.scores[i + 3];
+                        }
+                    }
+                }
+                totalScore += score;
             }
         }
         return totalScore;

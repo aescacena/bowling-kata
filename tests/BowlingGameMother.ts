@@ -1,19 +1,19 @@
 import {BowlingGame} from "../src/BowlingGame";
 
 export class BowlingGameMother{
-    static create(scores: number[], turnTypes: string[]): BowlingGame{
-        return new BowlingGame(scores, turnTypes);
+    static create(scores: number[]): BowlingGame{
+        return new BowlingGame(scores);
     }
 
     static createEmpty(): BowlingGame{
-        return this.create([], []);
+        return this.create([]);
     }
 
     static createWithABowlingStrike(): BowlingGame{
-        return this.create([10], ["STRIKE"]);
+        return this.create([10, 0]);
     }
 
     static createWithTwoBowlingStrikes(): BowlingGame{
-        return this.create([10, 10], ["STRIKE", "STRIKE"]);
+        return this.create([10, 0, 10, 0]);
     }
 }
