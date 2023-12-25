@@ -10,10 +10,10 @@ export class BowlingGameMother{
     }
 
     static createWithABowlingStrike(): BowlingGame{
-        return this.create([10, -1]);
+        return this.create([10]);
     }
 
     static createWithTwoBowlingStrikes(): BowlingGame{
-        return this.create([10, -1, 10, -1]);
+        return this.create([10, 10]);
     }
 }

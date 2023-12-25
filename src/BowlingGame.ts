@@ -8,28 +8,33 @@ export class BowlingGame{
     }
 
     addNumberDown(number: number) {
-        if((this.scores.length / 2) >= this.maxScore){
-            this.scores.push(number);
-            return;
-        }
-        if(this.isStrike(number)){
-            this.scores.push(this.maxScore);
-            this.scores.push(-1);
-            return;
-        }
         this.scores.push(number <= this.maxScore ? number : this.maxScore);
     }
 
     countScore(): number{
         let totalScore   = 0;
-        const totalGames = (this.scores.length / 2);
-        const games      = totalGames < this.maxGames ? totalGames : this.maxGames;
-        for (let i = 0; i < games; i = i + 1) {
-            const launchNumber = i * 2;
-            if(this.isLaunched(launchNumber) && this.isStrike(this.scores[launchNumber])){
-                totalScore += this.scores[launchNumber];
-                totalScore += this.getNextTwoScores(launchNumber);
+        let numberLaunch = 1;
+        let games        = 0;
+        for (let i = 0; i < this.scores.length; i = i + 1) {
+            if(games == this.maxGames){
+                break;
             }
+            totalScore += this.scores[i];
+            if(this.isStrike(this.scores[i])){
+                totalScore += this.getNextTwoScores(i);
+                numberLaunch = 1;
+                games++;
+                continue;
+            }
+            if(numberLaunch == 2){
+                if(this.isSpare(this.scores[i - 1] + this.scores[i])){
+                    totalScore += this.getNextScores(i);
+                }
+                numberLaunch = 1;
+                games++;
+                continue;
+            }
+            numberLaunch++;
         }
         return totalScore;
     }
@@ -44,6 +49,16 @@ export class BowlingGame{
             }
             if(numberScoreObtained == 2){
                 return score;
+            }
+        }
+        return score;
+    }
+
+    private getNextScores(actualLaunch: number): number{
+        let score = 0;
+        for (let i = actualLaunch + 1; i < this.scores.length ; i++) {
+            if(this.isLaunched(i)){
+                return this.scores[i];
             }
         }
         return score;
