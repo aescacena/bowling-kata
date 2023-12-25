@@ -6,9 +6,9 @@ describe("object to count the points obtained in the bowling game", () => {
     describe("Check Strikes on each turn", () =>{
         it("Should get 10 points because obtain Strike on the first turn", () => {
             // Arrange
-            const bowlingGame = new BowlingGame();
+            const bowlingGame       = new BowlingGame();
             const numberBowlingDown = 10;
-            const scoreExpect = 10;
+            const scoreExpect       = 10;
 
             // Act
             bowlingGame.addNumberDown(numberBowlingDown);
@@ -19,9 +19,9 @@ describe("object to count the points obtained in the bowling game", () => {
 
         it("Should get 30 points because obtain Strike on the first and second turn.", () => {
             // Arrange
-            const bowlingGame = BowlingGameMother.createWithABowlingStrike();
+            const bowlingGame       = BowlingGameMother.createWithABowlingStrike();
             const numberBowlingDown = 10;
-            const scoreExpect = 30;
+            const scoreExpect       = 30;
 
             // Act
             bowlingGame.addNumberDown(numberBowlingDown);
@@ -45,9 +45,9 @@ describe("object to count the points obtained in the bowling game", () => {
 
         it("Should get 300 points because obtain Strike on all turns.", () => {
             // Arrange
-            const bowlingGame = BowlingGameMother.create([]);
+            const bowlingGame       = BowlingGameMother.create([]);
             const numberBowlingDown = 10;
-            const scoreExpect = 300;
+            const scoreExpect       = 300;
 
             // Act
             for (let i = 0; i < 12; i++) {
