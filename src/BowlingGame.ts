@@ -14,21 +14,21 @@ export class BowlingGame{
     countScore(): number{
         let totalScore  = 0;
         let frameNumber = 1;
-        let games        = 0;
+        let games       = 0;
         for (let i = 0; i < this.scores.length; i = i + 1) {
-            if(games == this.maxGames){
+            if(this.allGamesCounted(games)){
                 break;
             }
             totalScore += this.scores[i];
             if(this.isStrike(i)){
-                totalScore += this.getNextTwoScores(i);
+                totalScore += this.strikePlusScoresFor(i);
                 frameNumber = 1;
                 games++;
                 continue;
             }
             if(frameNumber == 2){
                 if(this.isSpare(i)){
-                    totalScore += this.getNextScores(i);
+                    totalScore += this.sparePlusScoreFor(i);
                 }
                 frameNumber = 1;
                 games++;
@@ -39,11 +39,15 @@ export class BowlingGame{
         return totalScore;
     }
 
-    private getNextTwoScores(actualLaunch: number): number{
+    private allGamesCounted(games: number): boolean{
+        return games == this.maxGames
+    }
+
+    private strikePlusScoresFor(frameIndex: number): number{
         let score = 0;
         let numberScoreObtained = 0;
-        for (let i = actualLaunch + 1; i < this.scores.length ; i++) {
-            if(this.isLaunched(i)){
+        for (let i = frameIndex + 1; i < this.scores.length ; i++) {
+            if(this.isValidFrame(i)){
                 score += this.scores[i];
                 numberScoreObtained++;
             }
@@ -54,24 +58,24 @@ export class BowlingGame{
         return score;
     }
 
-    private getNextScores(frameActual: number): number{
+    private sparePlusScoreFor(frameActual: number): number{
         let score = 0;
         for (let i = frameActual + 1; i < this.scores.length ; i++) {
-            if(this.isLaunched(i)){
+            if(this.isValidFrame(i)){
                 return this.scores[i];
             }
         }
         return score;
     }
 
-    private isLaunched(launchNumber: number) {
-        if(launchNumber >= this.scores.length){
+    private isValidFrame(frameIndex: number) {
+        if(frameIndex >= this.scores.length){
             return false;
         }
-        if(this.scores[launchNumber] == -1){
+        if(this.scores[frameIndex] == -1){
             return false;
         }
-        return launchNumber < (this.scores.length);
+        return frameIndex < (this.scores.length);
     }
 
     private isStrike(frameIndex: number) {
