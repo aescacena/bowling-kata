@@ -12,29 +12,29 @@ export class BowlingGame{
     }
 
     countScore(): number{
-        let totalScore   = 0;
-        let numberLaunch = 1;
+        let totalScore  = 0;
+        let frameNumber = 1;
         let games        = 0;
         for (let i = 0; i < this.scores.length; i = i + 1) {
             if(games == this.maxGames){
                 break;
             }
             totalScore += this.scores[i];
-            if(this.isStrike(this.scores[i])){
+            if(this.isStrike(i)){
                 totalScore += this.getNextTwoScores(i);
-                numberLaunch = 1;
+                frameNumber = 1;
                 games++;
                 continue;
             }
-            if(numberLaunch == 2){
-                if(this.isSpare(this.scores[i - 1] + this.scores[i])){
+            if(frameNumber == 2){
+                if(this.isSpare(i)){
                     totalScore += this.getNextScores(i);
                 }
-                numberLaunch = 1;
+                frameNumber = 1;
                 games++;
                 continue;
             }
-            numberLaunch++;
+            frameNumber++;
         }
         return totalScore;
     }
@@ -54,9 +54,9 @@ export class BowlingGame{
         return score;
     }
 
-    private getNextScores(actualLaunch: number): number{
+    private getNextScores(frameActual: number): number{
         let score = 0;
-        for (let i = actualLaunch + 1; i < this.scores.length ; i++) {
+        for (let i = frameActual + 1; i < this.scores.length ; i++) {
             if(this.isLaunched(i)){
                 return this.scores[i];
             }
@@ -74,11 +74,11 @@ export class BowlingGame{
         return launchNumber < (this.scores.length);
     }
 
-    private isStrike(score: number) {
-        return score == this.maxScore;
+    private isStrike(frameIndex: number) {
+        return this.scores[frameIndex] == this.maxScore;
     }
 
-    private isSpare(number: number) {
-        return this.maxScore == number;
+    private isSpare(frameIndex: number) {
+        return this.maxScore == (this.scores[frameIndex - 1] + this.scores[frameIndex]);
     }
 }
